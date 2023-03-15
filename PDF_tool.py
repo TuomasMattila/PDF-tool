@@ -16,32 +16,37 @@ def main():
 
     print("\n--- PDF tool ---")
 
+    # Check if any valid PDF was inputted as command-line argument
+    try:
+        filename = sys.argv[1]
+        reader = pypdf.PdfReader(filename)
+        invalid_file = False
+    except:
+        invalid_file = True
+
+    # Main loop
     while True:
-        try:
-            filename = sys.argv[1]
-            reader = pypdf.PdfReader(filename)
-        except:
-            invalid_file = True
-            while invalid_file:
-                filename = input("\nGive the name of the PDF file (Q to quit): ")
-                if filename.lower() == "q":
-                    quit()
-                else:
+        while invalid_file:
+            filename = input("\nGive the name of the PDF file (Q to quit): ")
+            if filename.lower() == "q":
+                quit()
+            else:
+                try:
+                    reader = pypdf.PdfReader(filename)
+                    invalid_file = False
+                except:
                     try:
-                        reader = pypdf.PdfReader(filename)
+                        reader = pypdf.PdfReader(filename + ".pdf")
                         invalid_file = False
                     except:
-                        try:
-                            reader = pypdf.PdfReader(filename + ".pdf")
-                            invalid_file = False
-                        except:
-                            print("Invalid file, try again.")
+                        print("Invalid file, try again.")
 
         print(f"\nReading {filename} with {len(reader.pages)} pages...")
         
         if reader.outline:
             answer = input("This PDF already contains bookmarks,\nAre you sure you want to replace them? (Y/N): ")
             if answer.lower() != 'y':
+                invalid_file = True
                 continue
 
         writer = pypdf.PdfWriter()
@@ -74,6 +79,7 @@ def main():
         except:
             print(f"Something went wrong when attempting to save the file {new_filename}")
             print("Make sure you do not have a file with that name open.\n")
+        invalid_file = True
 
 if __name__ == '__main__':
     main()

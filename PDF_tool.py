@@ -13,7 +13,7 @@ The new pdf with the bookmarks replaces the old pdf.
 import pypdf
 import sys
 
-print("\n--- PDF bookmark generator ---\n")
+print("\n--- PDF bookmark generator ---")
 
 while True:
     try:
@@ -22,7 +22,7 @@ while True:
     except:
         invalid_file = True
         while invalid_file:
-            filename = input("Give the name of the PDF file (Q to quit): ")
+            filename = input("\nGive the name of the PDF file (Q to quit): ")
             if filename.lower() == "q":
                 quit()
             else:
@@ -37,6 +37,13 @@ while True:
                         print("Invalid file, try again.")
 
     print(f"\nReading {filename} with {len(reader.pages)} pages...")
+    
+    if reader.outline:
+        answer = input("This PDF already contains bookmarks,\nAre you sure you want to replace them? (Y/N): ")
+        if answer.lower() != 'y':
+            continue
+
+
     writer = pypdf.PdfWriter()
     num_bookmarks = 0
 
@@ -54,14 +61,16 @@ while True:
     writer.add_metadata(reader.metadata)
 
     if filename.endswith(".pdf"):
-        new_filename = filename
+        # new_filename = filename
+        new_filename = filename[:filename.index(".pdf")] + "_new" + ".pdf"
     else:
-        new_filename = filename + ".pdf"
+        # new_filename = filename + ".pdf"
+        new_filename = filename + "_new" + ".pdf"
 
     try:
         with open(f"{new_filename}", "wb") as file:
             writer.write(file)
-        print(f"Success! Added {num_bookmarks} bookmarks to {new_filename}.\n")
+        print(f"Success! Added {num_bookmarks} bookmarks to {new_filename}.")
     except:
         print(f"Something went wrong when attempting to save the file {new_filename}")
         print("Make sure you do not have a file with that name open.\n")

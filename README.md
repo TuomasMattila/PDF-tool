@@ -30,5 +30,7 @@ py PDF_tool.py filename.pdf
 
 ## Changelog
 15.3.2023: Adding bookmarks can be cancelled if the PDF already has them
+
 15.3.2023: Can add bookmarks to a PDF file
+
 15.3.2023: Initialized repository

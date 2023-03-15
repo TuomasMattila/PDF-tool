@@ -61,16 +61,19 @@ def name_new_pdf(filename: str) -> str:
 
 
 def main():
+    invalid_file = True
 
     print("\n--- PDF tool ---")
 
     # Check if any valid PDF was inputted as command-line argument
-    try:
-        filename = sys.argv[1]
-        reader = pypdf.PdfReader(filename)
-        invalid_file = False
-    except:
-        invalid_file = True
+    if len(sys.argv) > 1:
+        try:
+            filename = sys.argv[1]
+            reader = pypdf.PdfReader(filename)
+            invalid_file = False
+        except:
+            print("\nThe file given as a command-line argument was invalid.")
+            invalid_file = True
 
     # Main loop
     while True:

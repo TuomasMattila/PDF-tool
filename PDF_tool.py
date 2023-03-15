@@ -8,8 +8,6 @@ adds the input file's metadata to the output and saves the pdf.
 The new pdf with the bookmarks replaces the old pdf.
 """
 
-# TODO: Make it possible to input a folder, and the script will generate bookmarks for all pdf files in that folder
-
 import pypdf
 import sys
 
@@ -64,10 +62,10 @@ def main():
 
         if filename.endswith(".pdf"):
             # new_filename = filename
-            new_filename = filename[:filename.index(".pdf")] + "_new" + ".pdf"
+            new_filename = filename[:filename.index(".pdf")] + "_new" + ".pdf" # TODO: will be deleted eventually
         else:
             # new_filename = filename + ".pdf"
-            new_filename = filename + "_new" + ".pdf"
+            new_filename = filename + "_new" + ".pdf" # TODO: will be deleted eventually
 
         try:
             with open(f"{new_filename}", "wb") as file:

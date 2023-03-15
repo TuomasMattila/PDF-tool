@@ -44,7 +44,7 @@ def main():
         print(f"\nReading {filename} with {len(reader.pages)} pages...")
         
         if reader.outline:
-            answer = input("This PDF already contains bookmarks,\nAre you sure you want to replace them? (Y/N): ")
+            answer = input("\nThis PDF already contains bookmarks,\nAre you sure you want to replace them? (Y/N): ")
             if answer.lower() != 'y':
                 invalid_file = True
                 continue

@@ -19,19 +19,21 @@ def get_pdf_reader(filename: str) -> pypdf.PdfReader | bool:
     
     Returns a `PdfReader` if successful, `False` otherwise.
     """
-    reader = False
     try:
         reader = pypdf.PdfReader(filename)
     except:
         try:
             reader = pypdf.PdfReader(filename + ".pdf")
         except:
-            print("Invalid file, try again.")
+            reader = False
     return reader
 
 
 def generate_bookmarks(reader: pypdf.PdfReader) -> pypdf.PdfWriter:
-    """Generates bookmarks for a PDF file defined by `reader`."""
+    """
+    Generates bookmarks for a PDF file defined by `reader`.
+    Also, copies metadata from `reader` to `writer`.
+    """
     writer = pypdf.PdfWriter()
 
     for page_num, page in enumerate(reader.pages):
@@ -61,16 +63,19 @@ def name_new_pdf(filename: str) -> str:
 
 
 def main():
+    invalid_file = True
 
     print("\n--- PDF tool ---")
 
     # Check if any valid PDF was inputted as command-line argument
-    try:
-        filename = sys.argv[1]
-        reader = pypdf.PdfReader(filename)
-        invalid_file = False
-    except:
-        invalid_file = True
+    if len(sys.argv) > 1:
+        try:
+            filename = sys.argv[1]
+            reader = pypdf.PdfReader(filename)
+            invalid_file = False
+        except:
+            print("\nThe file given as a command-line argument was invalid.")
+            invalid_file = True
 
     # Main loop
     while True:
@@ -80,7 +85,10 @@ def main():
                 quit()
             else:
                 reader = get_pdf_reader(filename)
-                if reader: invalid_file = False
+                if reader:
+                    invalid_file = False
+                else:
+                    print("Invalid file, try again.")
 
         print(f"\nReading {filename} with {len(reader.pages)} pages...")
 

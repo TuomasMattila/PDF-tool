@@ -4,6 +4,7 @@ Tool for modifying PDFs in different ways.
 ## Features
 - Automatically create bookmarks for a PDF
 - Create bookmarks for multiple PDF files at a time
+- Simple GUI
 
 ## Installation
 - Install Python 3
@@ -14,11 +15,7 @@ pip install -r requirements.txt
 
 ## Usage
 ```
-py PDF_tool.py
-```
-or
-```
-py PDF_tool.py filename.pdf
+py main.py
 ```
 
 ## Upcoming features
@@ -26,7 +23,6 @@ py PDF_tool.py filename.pdf
 - Make the PDF's file name also the title for the PDF
   - Title is a part of the metadata
   - Title is often displayed in PDF viewing software instead of file name
-- GUI
 
 ## Changelog
 18.3.2023: Simple GUI for the app, adding bookmarks to multiple PDF files a time

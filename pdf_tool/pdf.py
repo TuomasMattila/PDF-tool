@@ -1,3 +1,6 @@
+"""
+Class for storing PDf file's filename, reader and writer.
+"""
 import pypdf
 
 class Pdf:

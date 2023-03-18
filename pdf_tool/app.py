@@ -11,7 +11,11 @@ from pdf_tool.data import Data
 
 
 class App(tk.Tk):
-    """Class for the main application."""
+    """
+    Class for the GUI.
+    Takes a `Data` object as parameter to create a connection
+    between the GUI and the data.
+    """
     def __init__(self, data: Data):
         super().__init__()
         sv_ttk.set_theme("dark")
@@ -59,16 +63,13 @@ class App(tk.Tk):
         
         self.frm_main.pack(fill='both', padx=10, pady=10)
 
-
     def choose_pdfs(self):
-        print("Clicked button")
         self.data.add_pdfs(fd.askopenfilenames(title="Choose PDF files",
                                                 initialdir='./',
                                                 filetypes=[('PDF file', '*.pdf')]))
         print(self.data.get_filenames())
         self.list_pdfs.delete(0, len(self.data.get_filenames()))
         self.list_pdfs.insert(0, *self.data.get_filenames())
-
 
     def remove_pdfs(self):
         self.list_pdfs.delete(0, len(self.data.get_filenames()))
@@ -77,7 +78,6 @@ class App(tk.Tk):
 
     def generate_bookmarks(self):
         self.data.generate_bookmarks()
-
 
     def save_changes(self):
         self.data.save_files()

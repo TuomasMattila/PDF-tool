@@ -3,7 +3,6 @@ This test suite needs to be run from the root directory of the project.
 Example command for executing (while being in the directory where main.py is):
 py -m pdf_tool.tests.tests
 """
-
 import unittest
 import pypdf
 from pdf_tool import utils

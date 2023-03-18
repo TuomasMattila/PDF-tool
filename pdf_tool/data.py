@@ -5,12 +5,13 @@ from pdf_tool import utils
 from pdf_tool.pdf import Pdf
 
 class Data:
+    """Class for storing and processing `Pdf` objects."""
     def __init__(self):
         self.pdfs = []
 
     def add_pdfs(self, filenames: list):
         for filename in filenames:
-            self.pdfs.append(Pdf(filename))
+            self.add_pdf(Pdf(filename))
 
     def add_pdf(self, pdf_file: Pdf):
         self.pdfs.append(pdf_file)

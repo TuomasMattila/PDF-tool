@@ -1,6 +1,13 @@
 import pypdf
 
 class Pdf:
+    """
+    Class that contains all information about one PDF file.
+    Stores the filename, reader and writer for the pdf.
+
+    Reader is generated using the `filename` given as an argument,
+    and all pages and metadata from reader are added to the writer.
+    """
     def __init__(self, filename):
         self.filename = filename
         try:

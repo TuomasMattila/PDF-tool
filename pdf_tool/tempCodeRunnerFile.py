@@ -1,0 +1,1 @@
+lambda: utils.generate_bookmarks()

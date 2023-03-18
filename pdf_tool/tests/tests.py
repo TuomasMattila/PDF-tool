@@ -1,6 +1,12 @@
+"""
+This test suite needs to be run from the root directory of the project.
+Example command for executing (while being in the directory where main.py is):
+py -m pdf_tool.tests.tests
+"""
+
 import unittest
 import pypdf
-from utilities import generate_bookmarks
+from pdf_tool import utils
 
 class Tests(unittest.TestCase):
 
@@ -10,7 +16,7 @@ class Tests(unittest.TestCase):
             init_writer.write(file)
         empty_reader = pypdf.PdfReader("empty.pdf")
 
-        writer = generate_bookmarks(empty_reader)
+        writer = utils.generate_bookmarks(empty_reader)
         self.assertEqual(writer.get_outline_root(), {})
 
     def test_get_pdf_reader(self):

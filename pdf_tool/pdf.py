@@ -28,4 +28,17 @@ class Pdf:
     def get_bookmarks(self):
         if not self.reader:
             return False
-        return [outline['/Title'] for outline in self.reader.outline]
+        bookmarks = []
+        self.get_bookmark_names(self.reader.outline, bookmarks)
+        return bookmarks
+    
+    def get_bookmark_names(self, outline, bm_list):
+        """
+        Recursive function for getting all bookmarks in
+        a hierarchical bookmarks structure.
+        """
+        for item in outline:
+            if isinstance(item, list):
+                self.get_bookmark_names(item, bm_list)
+            else:
+                bm_list.append(item['/Title'])

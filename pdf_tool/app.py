@@ -30,6 +30,7 @@ class App(tk.Tk):
 
         self.list_pdfs = tk.Listbox(self.frm_main)
         self.list_pdfs.bind('<<ListboxSelect>>', self.on_pdf_selected)
+        self.list_pdfs.bind('<Double-Button-1>', self.remove_pdf)
         self.list_pdfs.pack(fill='both')
 
         self.btn_browse_pdf = ttk.Button(self.frm_main,
@@ -92,8 +93,10 @@ class App(tk.Tk):
     
     def generate_bookmarks(self):
         self.update_status("Generating bookmarks...")
-        self.data.generate_bookmarks()
-        self.update_status("Bookmarks generated")
+        if self.data.generate_bookmarks():
+            self.update_status("Bookmarks generated")
+        else:
+            self.update_status("Choose PDF files first")
 
     def combine_pdfs(self):
         self.update_status("Combining PDF files...")
@@ -103,9 +106,13 @@ class App(tk.Tk):
             self.update_status('Failed to combine PDF files, make sure your files are not corrupted')
 
     def on_pdf_selected(self, event):
-        print(self.list_pdfs.curselection())
-        print(self.list_pdfs.get(self.list_pdfs.curselection()[0]))
-        print(self.data.get_bookmarks(self.list_pdfs.get(self.list_pdfs.curselection()[0])))
+        if self.list_pdfs.curselection():
+            print(self.data.get_bookmarks(self.list_pdfs.get(self.list_pdfs.curselection()[0])))
+
+    def remove_pdf(self, event):
+        selection = self.list_pdfs.curselection()[0]
+        self.data.remove_pdf(self.list_pdfs.get(selection))
+        self.list_pdfs.delete(selection)
 
     def save_changes(self):
         self.data.save_files()

@@ -11,6 +11,8 @@ class Data:
 
     def add_pdfs(self, filenames: list):
         for filename in filenames:
+            if filename in self.get_filenames():
+                self.remove_pdf(filename)
             self.add_pdf(Pdf(filename))
 
     def add_pdf(self, pdf_file: Pdf):
@@ -23,8 +25,12 @@ class Data:
         return [pdf_file.filename for pdf_file in self.pdfs]
     
     def generate_bookmarks(self):
-        for pdf in self.pdfs:
-            pdf.writer = utils.generate_bookmarks(pdf.reader)
+        if not self.pdfs:
+            return False
+        else:
+            for pdf in self.pdfs:
+                pdf.writer = utils.generate_bookmarks(pdf.reader)
+            return True
 
     def combine_pdfs(self):
         readers = [pdf.reader for pdf in self.pdfs]
@@ -36,7 +42,7 @@ class Data:
         return False
     
     def get_bookmarks(self, filename: str) -> list:
-        bookmarks = [pdf.get_bookmarks() for pdf in self.pdfs]
+        bookmarks = [pdf.get_bookmarks() for pdf in self.pdfs if pdf.filename == filename]
         return bookmarks
 
     def save_files(self):

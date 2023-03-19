@@ -115,7 +115,10 @@ class App(tk.Tk):
         self.list_pdfs.delete(selection)
 
     def save_changes(self):
-        self.data.save_files()
+        if self.data.save_files():
+            self.update_status("Changes saved succefully")
+        else:
+            self.update_status("Choose PDF files first")
 
     def update_status(self, message: str):
         self.lbl_status['text'] = message

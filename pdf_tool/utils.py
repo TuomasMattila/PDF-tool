@@ -35,7 +35,7 @@ def generate_bookmarks(reader: pypdf.PdfReader) -> pypdf.PdfWriter:
         text = page.extract_text()
         # If there is no text on a page, we will just skip it
         try:
-            heading = text[:text.index("\n")]
+            heading = text[:text.index("\n")].strip()
         except:
             continue
         writer.add_outline_item(heading, page_num)

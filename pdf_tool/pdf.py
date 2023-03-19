@@ -21,9 +21,7 @@ class Pdf:
             except:
                 self.reader = None
         self.writer = pypdf.PdfWriter()
-        for page_num, page in enumerate(self.reader.pages):
-            self.writer.add_page(page)
-        self.writer.add_metadata(self.reader.metadata)
+        self.writer.clone_reader_document_root(self.reader)
 
     def get_bookmarks(self):
         if not self.reader:

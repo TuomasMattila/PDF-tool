@@ -46,9 +46,13 @@ class Data:
         return bookmarks
 
     def save_files(self):
-        for pdf in self.pdfs:
-            pdf.filename = utils.name_new_pdf(pdf.filename)
-            utils.save_new_pdf(pdf.writer, pdf.filename)
+        if not self.pdfs:
+            return False
+        else:
+            for pdf in self.pdfs:
+                pdf.filename = utils.name_new_pdf(pdf.filename)
+                utils.save_new_pdf(pdf.writer, pdf.filename)
+            return True
 
     def reset(self):
         self.__init__()

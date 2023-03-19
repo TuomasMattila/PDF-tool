@@ -44,6 +44,30 @@ def generate_bookmarks(reader: pypdf.PdfReader) -> pypdf.PdfWriter:
 
     return writer
 
+def combine_pdfs(readers) -> pypdf.PdfWriter:
+    """Combines a list of `pypdf.PdfReader`s into one `pypdf.PdfWriter` and returns it."""
+    writer = pypdf.PdfWriter()
+
+    page_num = 0
+    for reader in readers:
+        first_page = True
+        for page in reader.pages:
+            writer.add_page(page)
+            text = page.extract_text()
+            # If there is no text on a page, we will just skip it
+            try:
+                heading = text[:text.index("\n")]
+            except:
+                continue
+            if first_page:
+                parent_bookmark = writer.add_outline_item(heading, page_num)
+                first_page = False
+            else:
+                writer.add_outline_item(heading, page_num, parent_bookmark)
+            page_num += 1
+
+    return writer
+
 
 def name_new_pdf(filename: str) -> str:
     """Generates new name for the output file."""

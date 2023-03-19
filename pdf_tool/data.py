@@ -26,6 +26,19 @@ class Data:
         for pdf in self.pdfs:
             pdf.writer = utils.generate_bookmarks(pdf.reader)
 
+    def combine_pdfs(self):
+        readers = [pdf.reader for pdf in self.pdfs]
+        if readers:
+            writer = utils.combine_pdfs(readers)
+            if writer:
+                utils.save_new_pdf(writer, 'Combined.pdf')
+                return True
+        return False
+    
+    def get_bookmarks(self, filename: str) -> list:
+        bookmarks = [pdf.get_bookmarks() for pdf in self.pdfs]
+        return bookmarks
+
     def save_files(self):
         for pdf in self.pdfs:
             pdf.filename = utils.name_new_pdf(pdf.filename)

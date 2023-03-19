@@ -24,3 +24,8 @@ class Pdf:
         for page_num, page in enumerate(self.reader.pages):
             self.writer.add_page(page)
         self.writer.add_metadata(self.reader.metadata)
+
+    def get_bookmarks(self):
+        if not self.reader:
+            return False
+        return [outline['/Title'] for outline in self.reader.outline]

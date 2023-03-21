@@ -2,15 +2,14 @@
 Contains the GUI of the app.
 """
 import tkinter as tk
-from tkinter import ttk
 from tkinter import filedialog as fd
 
-import sv_ttk
+import customtkinter as ctk
 
 from pdf_tool.data import Data
 
 
-class App(tk.Tk):
+class App(ctk.CTk):
     """
     Class for the GUI.
     Takes a `Data` object as parameter to create a connection
@@ -18,58 +17,57 @@ class App(tk.Tk):
     """
     def __init__(self, data: Data):
         super().__init__()
-        sv_ttk.set_theme("dark")
         self.title('PDF tool')
         self.geometry('500x600')
         self.data = data
 
-        self.frm_main = ttk.Frame(self)
+        self.frm_main = ctk.CTkFrame(self)
 
-        self.lbl_choose_pdf = ttk.Label(self.frm_main, text='Choose PDF files')
+        self.lbl_choose_pdf = ctk.CTkLabel(self.frm_main, text='Choose PDF files')
         self.lbl_choose_pdf.pack(pady=10)
 
-        self.list_pdfs = tk.Listbox(self.frm_main)
+        self.list_pdfs = tk.Listbox(self.frm_main) # TODO: replace this with something better looking (maybe CTkTextbox?)
         self.list_pdfs.bind('<<ListboxSelect>>', self.on_pdf_selected)
         self.list_pdfs.bind('<Double-Button-1>', self.remove_pdf)
         self.list_pdfs.pack(fill='both')
 
-        self.btn_browse_pdf = ttk.Button(self.frm_main,
+        self.btn_browse_pdf = ctk.CTkButton(self.frm_main,
                                          text='Browse',
                                          width=20,
                                          command=self.choose_pdfs)
         self.btn_browse_pdf.pack(pady=10)
 
-        self.btn_clear_pdfs = ttk.Button(self.frm_main,
+        self.btn_clear_pdfs = ctk.CTkButton(self.frm_main,
                                          text='Clear list',
                                          width=20,
                                          command=self.remove_pdfs)
         self.btn_clear_pdfs.pack(pady=10)
 
-        self.btn_generate_bookmarks = ttk.Button(self.frm_main,
+        self.btn_generate_bookmarks = ctk.CTkButton(self.frm_main,
                                                  text='Generate bookmarks',
                                                  width=20,
                                                  command=self.generate_bookmarks)
         self.btn_generate_bookmarks.pack(pady=10)
 
-        self.btn_combine_pdfs = ttk.Button(self.frm_main,
+        self.btn_combine_pdfs = ctk.CTkButton(self.frm_main,
                                            text='Combine PDF files',
                                            width=20,
                                            command=self.combine_pdfs)
         self.btn_combine_pdfs.pack(pady=10)
 
-        self.btn_save_changes = ttk.Button(self.frm_main,
+        self.btn_save_changes = ctk.CTkButton(self.frm_main,
                                            text='Save changes',
                                            width=20,
                                            command=self.save_changes)
         self.btn_save_changes.pack(pady=10)
 
-        self.btn_quit = ttk.Button(self.frm_main,
+        self.btn_quit = ctk.CTkButton(self.frm_main,
                                    text='Quit',
                                    width=20,
                                    command=self.quit)
         self.btn_quit.pack(pady=10)
 
-        self.lbl_status = ttk.Label(self.frm_main, text="Choose PDF files")
+        self.lbl_status = ctk.CTkLabel(self.frm_main, text="Choose PDF files")
         self.lbl_status.pack(pady=10)
         
         self.frm_main.pack(fill='both', padx=10, pady=10)

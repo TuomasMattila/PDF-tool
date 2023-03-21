@@ -38,7 +38,7 @@ def generate_bookmarks(reader: pypdf.PdfReader) -> pypdf.PdfWriter:
             heading = text[:text.index("\n")].strip()
         except:
             continue
-        writer.add_outline_item(heading, page_num)
+        writer.add_outline_item(heading, page_num) # TODO: How to adjust the zoom of the bookmark? ('fit' parameter? How to use?)
 
     writer.add_metadata(reader.metadata)
 

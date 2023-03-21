@@ -8,6 +8,43 @@ import customtkinter as ctk
 
 from pdf_tool.data import Data
 
+PADDING = 10
+CORNER_RADIUS = 5
+
+
+class PDFList(ctk.CTkScrollableFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        self.pdf_checkbox_list = []
+        self.columnconfigure(0, weight=1)
+
+    def add_pdfs(self, filenames: list):
+        for filename in filenames:
+            if filename not in [cb.cget('text') for cb in self.pdf_checkbox_list]:
+                checkbox = ctk.CTkCheckBox(self, text=filename)
+                checkbox.grid(row=len(self.pdf_checkbox_list), column=0, columnspan=3, sticky='nw', pady=(0, PADDING))
+                self.pdf_checkbox_list.append(checkbox)
+
+    def remove_selected(self):
+        for cb in reversed(self.pdf_checkbox_list):
+            if cb.get():
+                cb.destroy()
+                self.pdf_checkbox_list.remove(cb)
+        for row_num, cb in enumerate(self.pdf_checkbox_list):
+            cb.grid_forget()
+            cb.grid(row=row_num, column=0, columnspan=3, sticky='nw', pady=(0, PADDING))
+
+    def get_selected(self):
+        return [cb.cget('text') for cb in self.pdf_checkbox_list if cb.get()]
+
+    def toggle_all(self, checked):
+        if checked:
+            for cb in self.pdf_checkbox_list:
+                cb.select()
+        else:
+            for cb in self.pdf_checkbox_list:
+                cb.deselect()
+
 
 class App(ctk.CTk):
     """
@@ -17,76 +54,85 @@ class App(ctk.CTk):
     """
     def __init__(self, data: Data):
         super().__init__()
+        ctk.set_appearance_mode('dark')
         self.title('PDF tool')
-        self.geometry('500x600')
+        self.geometry('500x650')
         self.data = data
 
         self.frm_main = ctk.CTkFrame(self)
 
-        self.lbl_choose_pdf = ctk.CTkLabel(self.frm_main, text='Choose PDF files')
-        self.lbl_choose_pdf.pack(pady=10)
+        self.lbl_choose_pdf = ctk.CTkLabel(self.frm_main, text='PDF files')
+        self.lbl_choose_pdf.pack(pady=PADDING)
 
-        self.list_pdfs = tk.Listbox(self.frm_main) # TODO: replace this with something better looking (maybe CTkTextbox?)
-        self.list_pdfs.bind('<<ListboxSelect>>', self.on_pdf_selected)
-        self.list_pdfs.bind('<Double-Button-1>', self.remove_pdf)
-        self.list_pdfs.pack(fill='both')
+        # PDF list section
+        self.frm_pdf_list_section = ctk.CTkFrame(self.frm_main)
+        self.frm_pdf_list_section.columnconfigure(0, weight=1)
 
-        self.btn_browse_pdf = ctk.CTkButton(self.frm_main,
-                                         text='Browse',
-                                         width=20,
-                                         command=self.choose_pdfs)
-        self.btn_browse_pdf.pack(pady=10)
+        self.checkbox_select_all = ctk.CTkCheckBox(self.frm_pdf_list_section, text='')
+        self.checkbox_select_all.grid(row=0, column=0, sticky='nw', padx=PADDING, pady=(PADDING, 0))
 
-        self.btn_clear_pdfs = ctk.CTkButton(self.frm_main,
-                                         text='Clear list',
-                                         width=20,
-                                         command=self.remove_pdfs)
-        self.btn_clear_pdfs.pack(pady=10)
+        self.btn_browse = ctk.CTkButton(self.frm_pdf_list_section, width=20, text="Browse", command=self.choose_pdfs)
+        self.btn_browse.grid(row=0, column=1, sticky='ne', padx=(0, PADDING), pady=(PADDING, 0))
+
+        self.btn_remove = ctk.CTkButton(self.frm_pdf_list_section, width=20, text="Remove selected")
+        self.btn_remove.grid(row=0, column=2, sticky='ne', padx=(0, PADDING), pady=(PADDING, 0))
+
+        self.pdf_list = PDFList(self.frm_pdf_list_section, fg_color='transparent')
+        self.pdf_list.grid(row=1, column=0, columnspan=3, pady=PADDING/2, padx=(PADDING/2-1, PADDING/2+1), sticky='nsew')
+
+        self.checkbox_select_all.configure(command=lambda: self.pdf_list.toggle_all(self.checkbox_select_all.get()))
+        self.btn_remove.configure(command=self.pdf_list.remove_selected)
+
+        self.frm_pdf_list_section.pack(fill='both', padx=PADDING, pady=PADDING)
+
 
         self.btn_generate_bookmarks = ctk.CTkButton(self.frm_main,
                                                  text='Generate bookmarks',
                                                  width=20,
                                                  command=self.generate_bookmarks)
-        self.btn_generate_bookmarks.pack(pady=10)
+        self.btn_generate_bookmarks.pack(pady=PADDING)
 
         self.btn_combine_pdfs = ctk.CTkButton(self.frm_main,
                                            text='Combine PDF files',
                                            width=20,
                                            command=self.combine_pdfs)
-        self.btn_combine_pdfs.pack(pady=10)
+        self.btn_combine_pdfs.pack(pady=PADDING)
 
         self.btn_save_changes = ctk.CTkButton(self.frm_main,
                                            text='Save changes',
                                            width=20,
                                            command=self.save_changes)
-        self.btn_save_changes.pack(pady=10)
+        self.btn_save_changes.pack(pady=PADDING)
 
         self.btn_quit = ctk.CTkButton(self.frm_main,
                                    text='Quit',
                                    width=20,
                                    command=self.quit)
-        self.btn_quit.pack(pady=10)
-
-        self.lbl_status = ctk.CTkLabel(self.frm_main, text="Choose PDF files")
-        self.lbl_status.pack(pady=10)
+        self.btn_quit.pack(pady=PADDING)
         
-        self.frm_main.pack(fill='both', padx=10, pady=10)
+        self.frm_main.pack(fill='both', ipadx=PADDING, ipady=PADDING, padx=PADDING, pady=PADDING)
+
+        self.frm_statusbar = ctk.CTkFrame(self, corner_radius=CORNER_RADIUS) # TODO: This does not look right yet
+        self.lbl_status = ctk.CTkLabel(self.frm_statusbar, text="Choose PDF files to begin", anchor='center', justify='center')
+        self.lbl_status.pack(fill='both')
+        self.frm_statusbar.pack(fill='both', padx=PADDING, pady=PADDING)
 
     def choose_pdfs(self):
         self.data.add_pdfs(fd.askopenfilenames(title="Choose PDF files",
                                                 initialdir='./',
                                                 filetypes=[('PDF file', '*.pdf')]))
-        self.list_pdfs.delete(0, 'end')
-        self.list_pdfs.insert(0, *self.data.get_filenames())
-        if self.list_pdfs.get(0, 'end'):
+        self.pdf_list.add_pdfs(self.data.get_filenames())
+        if self.data.get_filenames():
             self.update_status("Choose what you want to do with the PDF files")
         else:
             self.update_status("Choose PDF files")
 
     def remove_pdfs(self):
-        self.list_pdfs.delete(0, 'end')
-        self.data.reset()
-        self.update_status("Choose PDF files")
+        selected = self.pdf_list.get_selected()
+        self.pdf_list.remove_selected()
+        for filename in selected:
+            self.data.remove_pdf(filename)
+        self.update_status("Removed selected files")
 
     
     def generate_bookmarks(self):
@@ -119,7 +165,7 @@ class App(ctk.CTk):
             self.update_status("Choose PDF files first")
 
     def update_status(self, message: str):
-        self.lbl_status['text'] = message
+        self.lbl_status.configure(text=message)
 
     def quit(self):
         self.destroy()

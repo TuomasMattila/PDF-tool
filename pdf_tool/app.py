@@ -22,7 +22,7 @@ class PDFList(ctk.CTkScrollableFrame):
         for filename in filenames:
             if filename not in [cb.cget('text') for cb in self.pdf_checkbox_list]:
                 checkbox = ctk.CTkCheckBox(self, text=filename)
-                checkbox.grid(row=len(self.pdf_checkbox_list), column=0, columnspan=3, sticky='nw', pady=(0, PADDING))
+                checkbox.grid(row=len(self.pdf_checkbox_list), column=0, sticky='nw', pady=(0, PADDING))
                 self.pdf_checkbox_list.append(checkbox)
 
     def remove_selected(self):
@@ -32,7 +32,7 @@ class PDFList(ctk.CTkScrollableFrame):
                 self.pdf_checkbox_list.remove(cb)
         for row_num, cb in enumerate(self.pdf_checkbox_list):
             cb.grid_forget()
-            cb.grid(row=row_num, column=0, columnspan=3, sticky='nw', pady=(0, PADDING))
+            cb.grid(row=row_num, column=0, sticky='nw', pady=(0, PADDING))
 
     def get_selected(self):
         return [cb.cget('text') for cb in self.pdf_checkbox_list if cb.get()]
@@ -54,9 +54,9 @@ class App(ctk.CTk):
     """
     def __init__(self, data: Data):
         super().__init__()
-        ctk.set_appearance_mode('dark')
+        ctk.set_appearance_mode('dark') # TODO: This is only temporary, the app should look good with light mode also
         self.title('PDF tool')
-        self.geometry('500x650')
+        self.geometry('500x600')
         self.data = data
 
         self.frm_main = ctk.CTkFrame(self)
@@ -69,16 +69,19 @@ class App(ctk.CTk):
         self.frm_pdf_list_section.columnconfigure(0, weight=1)
 
         self.checkbox_select_all = ctk.CTkCheckBox(self.frm_pdf_list_section, text='')
-        self.checkbox_select_all.grid(row=0, column=0, sticky='nw', padx=PADDING, pady=(PADDING, 0))
+        self.checkbox_select_all.grid(row=0, column=0, sticky='nw', padx=PADDING, pady=PADDING)
 
-        self.btn_browse = ctk.CTkButton(self.frm_pdf_list_section, width=20, text="Browse", command=self.choose_pdfs)
-        self.btn_browse.grid(row=0, column=1, sticky='ne', padx=(0, PADDING), pady=(PADDING, 0))
+        self.btn_browse = ctk.CTkButton(self.frm_pdf_list_section, width=20, height=24, text="Browse", command=self.choose_pdfs)
+        self.btn_browse.grid(row=0, column=1, sticky='ne', padx=(0, PADDING), pady=PADDING)
 
-        self.btn_remove = ctk.CTkButton(self.frm_pdf_list_section, width=20, text="Remove selected")
-        self.btn_remove.grid(row=0, column=2, sticky='ne', padx=(0, PADDING), pady=(PADDING, 0))
+        self.btn_remove = ctk.CTkButton(self.frm_pdf_list_section, width=20, height=24, text="Remove selected")
+        self.btn_remove.grid(row=0, column=2, sticky='ne', padx=(0, PADDING), pady=PADDING)
+
+        self.separator = ctk.CTkFrame(self.frm_pdf_list_section, height=2, fg_color='#696969')
+        self.separator.grid(row=1, column=0, columnspan=3, sticky='ew', padx=PADDING)
 
         self.pdf_list = PDFList(self.frm_pdf_list_section, fg_color='transparent')
-        self.pdf_list.grid(row=1, column=0, columnspan=3, pady=PADDING/2, padx=(PADDING/2-1, PADDING/2+1), sticky='nsew')
+        self.pdf_list.grid(row=2, column=0, columnspan=3, pady=(0, PADDING/2), padx=(PADDING/2-1, PADDING/2+1), sticky='nsew')
 
         self.checkbox_select_all.configure(command=lambda: self.pdf_list.toggle_all(self.checkbox_select_all.get()))
         self.btn_remove.configure(command=self.pdf_list.remove_selected)
@@ -137,29 +140,20 @@ class App(ctk.CTk):
     
     def generate_bookmarks(self):
         self.update_status("Generating bookmarks...")
-        if self.data.generate_bookmarks():
+        if self.data.generate_bookmarks(self.pdf_list.get_selected()):
             self.update_status("Bookmarks generated")
         else:
             self.update_status("Choose PDF files first")
 
     def combine_pdfs(self):
         self.update_status("Combining PDF files...")
-        if self.data.combine_pdfs():
+        if self.data.combine_pdfs(self.pdf_list.get_selected()):
             self.update_status('Combined PDF files into Combined.pdf')
         else:
             self.update_status('Failed to combine PDF files, make sure your files are not corrupted')
 
-    def on_pdf_selected(self, event):
-        if self.list_pdfs.curselection():
-            print(self.data.get_bookmarks(self.list_pdfs.get(self.list_pdfs.curselection()[0])))
-
-    def remove_pdf(self, event):
-        selection = self.list_pdfs.curselection()[0]
-        self.data.remove_pdf(self.list_pdfs.get(selection))
-        self.list_pdfs.delete(selection)
-
     def save_changes(self):
-        if self.data.save_files():
+        if self.data.save_files(self.pdf_list.get_selected()):
             self.update_status("Changes saved succefully")
         else:
             self.update_status("Choose PDF files first")

@@ -10,11 +10,11 @@ import random
 def generate_test_pdf(title, first_min=0, first_max=0, second_min=0, second_max=0, third_min=0, third_max=0):
     """
     Generates a PDF file for testing purposes.
-    title is the PDF file name, first, second and third are
-    integers that define the maximum number of bookmarks
-    on the corresponging levels.
+    ``title`` is the PDF file name, the rest are
+    minimum and maximum number of bookmarks for each level.
     """
     canvas = Canvas(title)
+    canvas.setTitle(title)
     for i in range(random.randint(first_min, first_max)):
         canvas.drawString(inch, 10*inch, f"{i+1} Heading")
         canvas.bookmarkPage(f"{i}")
@@ -39,3 +39,5 @@ generate_test_pdf("test_2.pdf", 2, 5, 2, 5, 2, 5)
 generate_test_pdf("test_3.pdf", 3, 5, 3, 5, 3, 5)
 generate_test_pdf("test_4.pdf", 4, 5, 4, 5, 4, 5)
 generate_test_pdf("test_5.pdf", 5, 5, 5, 5, 5, 5)
+generate_test_pdf("test_6.pdf", 5, 5, 5, 5, 5, 5)
+generate_test_pdf("test_7.pdf", 5, 5, 5, 5, 5, 5)

@@ -24,16 +24,17 @@ class Data:
     def get_filenames(self) -> list:
         return [pdf_file.filename for pdf_file in self.pdfs]
     
-    def generate_bookmarks(self):
+    def generate_bookmarks(self, filenames):
         if not self.pdfs:
             return False
         else:
             for pdf in self.pdfs:
-                pdf.writer = utils.generate_bookmarks(pdf.reader)
+                if pdf.filename in filenames:
+                    pdf.writer = utils.generate_bookmarks(pdf.reader)
             return True
 
-    def combine_pdfs(self):
-        readers = [pdf.reader for pdf in self.pdfs]
+    def combine_pdfs(self, filenames):
+        readers = [pdf.reader for pdf in self.pdfs if pdf.filename in filenames]
         if readers:
             writer = utils.combine_pdfs(readers)
             if writer:
@@ -45,13 +46,14 @@ class Data:
         bookmarks = [pdf.get_bookmarks() for pdf in self.pdfs if pdf.filename == filename]
         return bookmarks
 
-    def save_files(self):
+    def save_files(self, filenames):
         if not self.pdfs:
             return False
         else:
             for pdf in self.pdfs:
-                pdf.filename = utils.name_new_pdf(pdf.filename)
-                utils.save_new_pdf(pdf.writer, pdf.filename)
+                if pdf.filename in filenames:
+                    pdf.filename = utils.name_new_pdf(pdf.filename)
+                    utils.save_new_pdf(pdf.writer, pdf.filename)
             return True
 
     def reset(self):

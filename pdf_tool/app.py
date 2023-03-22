@@ -62,7 +62,7 @@ class App(ctk.CTk):
         self.frm_main = ctk.CTkFrame(self)
 
         self.lbl_choose_pdf = ctk.CTkLabel(self.frm_main, text='PDF files')
-        self.lbl_choose_pdf.pack(pady=PADDING)
+        self.lbl_choose_pdf.pack(pady=(PADDING, 0))
 
         # PDF list section
         self.frm_pdf_list_section = ctk.CTkFrame(self.frm_main)
@@ -108,14 +108,14 @@ class App(ctk.CTk):
                                    text='Quit',
                                    width=20,
                                    command=self.quit)
-        self.btn_quit.pack(pady=PADDING)
+        self.btn_quit.pack(pady=(PADDING, 0))
         
         self.frm_main.pack(fill='both', ipadx=PADDING, ipady=PADDING, padx=PADDING, pady=PADDING)
 
-        self.frm_statusbar = ctk.CTkFrame(self, corner_radius=CORNER_RADIUS) # TODO: This does not look right yet
-        self.lbl_status = ctk.CTkLabel(self.frm_statusbar, text="Choose PDF files to begin", anchor='center', justify='center')
-        self.lbl_status.pack(fill='both')
-        self.frm_statusbar.pack(fill='both', padx=PADDING, pady=PADDING)
+        self.frm_statusbar = ctk.CTkFrame(self)
+        self.lbl_status = ctk.CTkLabel(self.frm_statusbar, text="Choose PDF files to begin")
+        self.lbl_status.pack()
+        self.frm_statusbar.pack(ipadx=PADDING, padx=PADDING)
 
     def choose_pdfs(self):
         self.data.add_pdfs(fd.askopenfilenames(title="Choose PDF files",

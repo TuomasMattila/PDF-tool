@@ -93,19 +93,19 @@ class App(ctk.CTk):
                                                  text='Generate bookmarks',
                                                  width=20,
                                                  command=self.generate_bookmarks)
-        self.btn_generate_bookmarks.pack(pady=PADDING)
+        self.btn_generate_bookmarks.pack(pady=(PADDING, 0))
 
         self.btn_combine_pdfs = ctk.CTkButton(self.frm_main,
                                            text='Combine PDF files',
                                            width=20,
                                            command=self.combine_pdfs)
-        self.btn_combine_pdfs.pack(pady=PADDING)
+        self.btn_combine_pdfs.pack(pady=(PADDING, 0))
 
         self.btn_save_changes = ctk.CTkButton(self.frm_main,
                                            text='Save changes',
                                            width=20,
                                            command=self.save_changes)
-        self.btn_save_changes.pack(pady=PADDING)
+        self.btn_save_changes.pack(pady=(PADDING, 0))
 
         self.btn_quit = ctk.CTkButton(self.frm_main,
                                    text='Quit',
@@ -118,7 +118,7 @@ class App(ctk.CTk):
         self.frm_statusbar = ctk.CTkFrame(self)
         self.lbl_status = ctk.CTkLabel(self.frm_statusbar, text="Choose PDF files to begin")
         self.lbl_status.pack()
-        self.frm_statusbar.pack(ipadx=PADDING, padx=PADDING)
+        self.frm_statusbar.pack(ipadx=PADDING, padx=PADDING, pady=PADDING, side='bottom')
 
     def choose_pdfs(self):
         self.data.add_pdfs(fd.askopenfilenames(title="Choose PDF files",

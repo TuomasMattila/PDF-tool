@@ -35,7 +35,7 @@ def generate_bookmarks(reader: pypdf.PdfReader) -> pypdf.PdfWriter:
         text = page.extract_text()
         # If there is no text on a page, we will just skip it
         try:
-            heading = text[:text.index("\n")].strip()
+            heading = text[:text.index("\n")].strip() # TODO: Have to make sure the bookmark text is not too short or long, cutting to '\n' might not be sufficient at all times
         except:
             continue
         writer.add_outline_item(heading, page_num) # TODO: How to adjust the zoom of the bookmark? ('fit' parameter? How to use?)

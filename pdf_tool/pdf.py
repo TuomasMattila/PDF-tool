@@ -20,8 +20,7 @@ class Pdf:
                 self.reader = pypdf.PdfReader(filename + ".pdf")
             except:
                 self.reader = None
-        self.writer = pypdf.PdfWriter()
-        self.writer.clone_reader_document_root(self.reader)
+        self.writer = pypdf.PdfWriter(self.reader)
 
     def get_bookmarks(self):
         if not self.reader:

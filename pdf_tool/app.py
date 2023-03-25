@@ -56,13 +56,17 @@ class App(ctk.CTk):
         super().__init__()
         ctk.set_appearance_mode('dark') # TODO: This is only temporary, the app should look good with light mode also
         self.title('PDF tool')
-        self.geometry('500x600')
+        self.geometry('800x600')
         self.data = data
+        self.columnconfigure((0, 1), weight=1)
+        self.rowconfigure(0, weight=1)
 
         self.frm_main = ctk.CTkFrame(self)
+        self.frm_main.columnconfigure(0, weight=1)
 
         self.lbl_choose_pdf = ctk.CTkLabel(self.frm_main, text='PDF files')
-        self.lbl_choose_pdf.pack(pady=(PADDING, 0))
+        self.lbl_choose_pdf.grid(row=0, column=0, pady=(PADDING, 0), sticky='nsew')
+
 
         # PDF list section
         self.frm_pdf_list_section = ctk.CTkFrame(self.frm_main)
@@ -86,39 +90,55 @@ class App(ctk.CTk):
         self.checkbox_select_all.configure(command=lambda: self.pdf_list.toggle_all(self.checkbox_select_all.get()))
         self.btn_remove.configure(command=self.pdf_list.remove_selected)
 
-        self.frm_pdf_list_section.pack(fill='both', padx=PADDING, pady=PADDING)
+        self.frm_pdf_list_section.grid(row=1, column=0, sticky='nsew', padx=PADDING, pady=PADDING)
 
 
-        self.btn_generate_bookmarks = ctk.CTkButton(self.frm_main,
+        # Buttons below PDF list
+        self.frm_buttons = ctk.CTkFrame(self.frm_main, fg_color='transparent')
+
+        self.btn_generate_bookmarks = ctk.CTkButton(self.frm_buttons,
                                                  text='Generate bookmarks',
                                                  width=20,
                                                  command=self.generate_bookmarks)
         self.btn_generate_bookmarks.pack(pady=(PADDING, 0))
 
-        self.btn_combine_pdfs = ctk.CTkButton(self.frm_main,
+        self.btn_combine_pdfs = ctk.CTkButton(self.frm_buttons,
                                            text='Combine PDF files',
                                            width=20,
                                            command=self.combine_pdfs)
         self.btn_combine_pdfs.pack(pady=(PADDING, 0))
 
-        self.btn_save_changes = ctk.CTkButton(self.frm_main,
+        self.btn_save_changes = ctk.CTkButton(self.frm_buttons,
                                            text='Save changes',
                                            width=20,
                                            command=self.save_changes)
         self.btn_save_changes.pack(pady=(PADDING, 0))
 
-        self.btn_quit = ctk.CTkButton(self.frm_main,
+        self.btn_quit = ctk.CTkButton(self.frm_buttons,
                                    text='Quit',
                                    width=20,
                                    command=self.quit)
         self.btn_quit.pack(pady=(PADDING, 0))
+
+        self.frm_buttons.grid(row=2, column=0, sticky='nsew')
         
-        self.frm_main.pack(fill='both', ipadx=PADDING, ipady=PADDING, padx=PADDING, pady=PADDING)
+        self.frm_main.grid(row=0, column=0, sticky='nsew', ipadx=PADDING, ipady=PADDING, padx=PADDING, pady=(PADDING, 0))
+
+
+        # Bookmark list
+        self.frm_bookmark_list = ctk.CTkFrame(self)
+
+        self.lbl_bookmarks = ctk.CTkLabel(self.frm_bookmark_list, text='Bookmarks')
+        self.lbl_bookmarks.pack(pady=PADDING)
+
+
+        self.frm_bookmark_list.grid(row=0, column=1, sticky='nsew', padx=(0, PADDING), pady=(PADDING, 0))
+
 
         self.frm_statusbar = ctk.CTkFrame(self)
         self.lbl_status = ctk.CTkLabel(self.frm_statusbar, text="Choose PDF files to begin")
         self.lbl_status.pack()
-        self.frm_statusbar.pack(ipadx=PADDING, padx=PADDING, pady=PADDING, side='bottom')
+        self.frm_statusbar.grid(row=1, column=0, sticky='nsew', columnspan=2, ipadx=PADDING, padx=PADDING, pady=PADDING)
 
     def choose_pdfs(self):
         self.data.add_pdfs(fd.askopenfilenames(title="Choose PDF files",

@@ -5,6 +5,7 @@ Tool for modifying PDFs in different ways.
 - Automatically create bookmarks for a PDF
 - Create bookmarks for multiple PDF files at a time
 - Combine PDF files
+- View bookmarks of a PDF
 - Simple GUI
 
 ## Installation
@@ -20,8 +21,8 @@ py main.py
 ```
 
 ## Upcoming features
-- Viewing the bookmarks of a PDF
 - Editing bookmarks in the GUI before saving them
+- Edit PDF's metadata
 
 ## Changelog
 19.3.2023: Combining PDF files

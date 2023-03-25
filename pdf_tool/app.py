@@ -193,10 +193,7 @@ class App(ctk.CTk):
     def on_pdf_selected(self, event):
         if len(self.pdf_list.get_selected()) == 1:
             selection = self.pdf_list.get_selected()[0]
-            try:
-                bookmarks = self.data.get_bookmarks(selection)[0] # TODO: bookmarks is empty for some reason after clicking Save changes
-            except:
-                print(self.data.get_bookmarks(selection))
+            bookmarks = self.data.get_bookmarks(selection)[0]
             self.bookmark_list.update_list(bookmarks)
         else:
             self.bookmark_list.update_list([])

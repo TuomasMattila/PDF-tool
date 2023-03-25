@@ -16,17 +16,17 @@ def generate_test_pdf(title, first_min=0, first_max=0, second_min=0, second_max=
     canvas = Canvas(title)
     canvas.setTitle(title)
     for i in range(random.randint(first_min, first_max)):
-        canvas.drawString(inch, 10*inch, f"{i+1} Heading")
+        canvas.drawString(inch, 10*inch, f"{i+1} Heading asd")
         canvas.bookmarkPage(f"{i}")
         canvas.addOutlineEntry(f"{i+1} Heading", f"{i}", 0)
         canvas.showPage()
         for j in range(random.randint(second_min, second_max)):
-            canvas.drawString(inch, 10*inch, f"{i+1}.{j+1} Heading")
+            canvas.drawString(inch, 10*inch, f"{i+1}.{j+1} Heading asd")
             canvas.bookmarkPage(f"{i}.{j}")
             canvas.addOutlineEntry(f"{i+1}.{j+1} Heading", f"{i}.{j}", 1)
             canvas.showPage()
             for k in range(random.randint(third_min, third_max)):
-                canvas.drawString(inch, 10*inch, f"{i+1}.{j+1}.{k+1} Heading")
+                canvas.drawString(inch, 10*inch, f"{i+1}.{j+1}.{k+1} Heading asd")
                 canvas.bookmarkPage(f"{i}.{j}.{k}")
                 canvas.addOutlineEntry(f"{i+1}.{j+1}.{k+1} Heading", f"{i}.{j}.{k}", 2)
                 canvas.showPage()

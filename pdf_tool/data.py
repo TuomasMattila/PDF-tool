@@ -52,8 +52,8 @@ class Data:
         else:
             for pdf in self.pdfs:
                 if pdf.filename in filenames:
-                    pdf.filename = utils.name_new_pdf(pdf.filename)
-                    utils.save_new_pdf(pdf.writer, pdf.filename)
+                    # utils.save_new_pdf(pdf.writer, pdf.filename)
+                    utils.save_new_pdf(pdf.writer, utils.name_new_pdf(pdf.filename)) # TODO: In the final version, we will not be generating the new filename, at least not like this
             return True
 
     def reset(self):

@@ -83,6 +83,7 @@ def name_new_pdf(filename: str) -> str:
 def save_new_pdf(writer: pypdf.PdfWriter, filename: str) -> bool:
     """Saves the new pdf file. Returns `True` if successful, `False` otherwise."""
     try:
+        writer.page_mode = '/UseOutlines'
         with open(f"{filename}", "wb") as file:
             writer.write(file)
         return True

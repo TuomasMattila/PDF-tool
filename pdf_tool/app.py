@@ -192,7 +192,10 @@ class App(ctk.CTk):
         if len(self.pdf_list.get_selected()) == 1:
             selection = self.pdf_list.get_selected()[0]
             bookmarks = self.data.get_bookmarks(selection)[0]
-            self.bookmark_list.update_list(bookmarks)
+            if bookmarks:
+                self.bookmark_list.update_list(bookmarks)
+            else:
+                self.bookmark_list.update_list([])
         else:
             self.bookmark_list.update_list([])
 

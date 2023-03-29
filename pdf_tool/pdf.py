@@ -11,7 +11,7 @@ class Pdf:
     Reader is generated using the `filename` given as an argument,
     and all pages and metadata from reader are added to the writer.
     """
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         self.filename = filename
         try:
             self.reader = pypdf.PdfReader(filename)

@@ -1,10 +1,8 @@
 """
 Contains the GUI of the app.
 """
-import tkinter as tk
-from tkinter import filedialog as fd
-
 import customtkinter as ctk
+from customtkinter import filedialog as fd
 
 from pdf_tool.data import Data
 

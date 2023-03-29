@@ -25,6 +25,8 @@ py main.py
 - Edit PDF's metadata
 
 ## Changelog
+25.3.2023: Bookmarks of a PDF can be viewed in the app
+
 19.3.2023: Combining PDF files
 
 18.3.2023: Simple GUI for the app, adding bookmarks to multiple PDF files a time

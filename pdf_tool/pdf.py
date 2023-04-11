@@ -20,6 +20,15 @@ class Pdf:
                 self.reader = pypdf.PdfReader(filename + ".pdf")
             except:
                 self.reader = None
+        # outline_str = str(self.reader.outline) # TODO: Remove these later, only for debugging purposes when needed
+        # outline_list = outline_str.split(', ')
+        # final_str = ''
+        # for item in outline_list:
+        #     if item.isdigit() or item.startswith('\'/Page\''):
+        #         final_str += item + ', '
+        #     else:
+        #         final_str += item + ',\n'
+        # print(final_str)
         self.writer = pypdf.PdfWriter()
 
     def get_bookmarks(self):

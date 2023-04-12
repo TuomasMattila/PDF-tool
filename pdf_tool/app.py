@@ -11,8 +11,9 @@ CORNER_RADIUS = 5
 
 
 class PDFList(ctk.CTkScrollableFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
+    def __init__(self, master, controller, **kwargs):
+        ctk.CTkScrollableFrame.__init__(self, master, **kwargs)
+        self.controller = controller
         self.pdf_checkbox_list = []
         self.columnconfigure(0, weight=1)
 
@@ -21,6 +22,7 @@ class PDFList(ctk.CTkScrollableFrame):
             if filename not in [cb.cget('text') for cb in self.pdf_checkbox_list]:
                 checkbox = ctk.CTkCheckBox(self, text=filename)
                 checkbox.grid(row=len(self.pdf_checkbox_list), column=0, sticky='nw', pady=(0, PADDING))
+                checkbox.bind('<Button-1>', self.controller.on_pdf_selected)
                 self.pdf_checkbox_list.append(checkbox)
 
     def remove_selected(self):
@@ -45,8 +47,9 @@ class PDFList(ctk.CTkScrollableFrame):
 
 
 class BookmarkList(ctk.CTkScrollableFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
+    def __init__(self, master, controller, **kwargs):
+        ctk.CTkScrollableFrame.__init__(self, master, **kwargs)
+        self.controller = controller
         self.columnconfigure(0, weight=1)
         self.bookmarks_list = []
 
@@ -97,9 +100,8 @@ class App(ctk.CTk):
         self.separator = ctk.CTkFrame(self.frm_pdf_list_section, height=2, fg_color='#696969')
         self.separator.grid(row=1, column=0, columnspan=3, sticky='ew', padx=PADDING)
 
-        self.pdf_list = PDFList(self.frm_pdf_list_section, fg_color='transparent')
+        self.pdf_list = PDFList(self.frm_pdf_list_section, self, fg_color='transparent')
         self.pdf_list.grid(row=2, column=0, columnspan=3, pady=(0, PADDING/2), padx=(PADDING/2-1, PADDING/2+1), sticky='nsew')
-        self.bind('<Button-1>', self.on_pdf_selected)
 
         self.checkbox_select_all.configure(command=lambda: self.pdf_list.toggle_all(self.checkbox_select_all.get()))
         self.btn_remove.configure(command=self.pdf_list.remove_selected)
@@ -137,7 +139,7 @@ class App(ctk.CTk):
         self.frm_bookmark_list = ctk.CTkFrame(self)
         self.lbl_bookmarks = ctk.CTkLabel(self.frm_bookmark_list, text='Bookmarks')
         self.lbl_bookmarks.pack(pady=PADDING)
-        self.bookmark_list = BookmarkList(self.frm_bookmark_list, fg_color='transparent')
+        self.bookmark_list = BookmarkList(self.frm_bookmark_list, self, fg_color='transparent')
         self.bookmark_list.pack(fill='both', expand=True, padx=PADDING/2, pady=(0, PADDING))
         self.frm_bookmark_list.grid(row=0, column=1, sticky='nsew', padx=(0, PADDING), pady=(PADDING, 0))
 

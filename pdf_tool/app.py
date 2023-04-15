@@ -112,7 +112,7 @@ class App(ctk.CTk):
         self.pdf_list.grid(row=2, column=0, columnspan=3, pady=(0, PADDING/2), padx=(PADDING/2-1, PADDING/2+1), sticky='nsew')
 
         self.checkbox_select_all.configure(command=lambda: self.pdf_list.toggle_all(self.checkbox_select_all.get()))
-        self.btn_remove.configure(command=self.pdf_list.remove_selected)
+        self.btn_remove.configure(command=self.remove_pdfs)
 
         self.frm_pdf_list_section.grid(row=1, column=0, sticky='nsew', padx=PADDING, pady=PADDING)
 
@@ -168,13 +168,14 @@ class App(ctk.CTk):
         self.pdf_list.remove_selected()
         for filename in selected:
             self.data.remove_pdf(filename)
+        self.update_bookmark_list()
         self.update_status("Removed selected files")
     
     def generate_bookmarks(self):
         self.update_status("Generating bookmarks...")
         if self.data.generate_bookmarks(self.pdf_list.get_selected()):
             self.update_status("Bookmarks generated")
-            self.on_pdf_selected(None)
+            self.update_bookmark_list()
         else:
             self.update_status("Choose PDF files first")
 
@@ -189,6 +190,9 @@ class App(ctk.CTk):
         self.lbl_status.configure(text=message)
 
     def on_pdf_selected(self, event):
+        self.update_bookmark_list()
+
+    def update_bookmark_list(self):
         if len(self.pdf_list.get_selected()) == 1:
             selection = self.pdf_list.get_selected()[0]
             bookmarks = self.data.get_bookmarks(selection)[0]

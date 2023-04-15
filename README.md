@@ -21,10 +21,12 @@ py main.py
 ```
 
 ## Upcoming features
-- Editing bookmarks in the GUI before saving them
+- Editing bookmarks in the GUI
 - Edit PDF's metadata
 
 ## Changelog
+15.4.2023: New bookmarks are automatically shown in the GUI after generating them
+
 25.3.2023: Bookmarks of a PDF can be viewed in the app
 
 19.3.2023: Combining PDF files

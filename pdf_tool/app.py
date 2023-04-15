@@ -174,6 +174,7 @@ class App(ctk.CTk):
         self.update_status("Generating bookmarks...")
         if self.data.generate_bookmarks(self.pdf_list.get_selected()):
             self.update_status("Bookmarks generated")
+            self.on_pdf_selected(None)
         else:
             self.update_status("Choose PDF files first")
 

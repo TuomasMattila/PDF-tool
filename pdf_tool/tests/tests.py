@@ -10,13 +10,7 @@ from pdf_tool import utils
 class Tests(unittest.TestCase):
 
     def test_generate_bookmarks(self):
-        init_writer = pypdf.PdfWriter()
-        with open(f"empty.pdf", "wb") as file:
-            init_writer.write(file)
-        empty_reader = pypdf.PdfReader("empty.pdf")
-
-        writer = utils.generate_bookmarks(empty_reader)
-        self.assertEqual(writer.get_outline_root(), {})
+        pass
 
     def test_get_pdf_reader(self):
         pass

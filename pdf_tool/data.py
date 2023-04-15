@@ -1,7 +1,7 @@
 """
 Contains a class for storing and processing data.
 """
-from pdf_tool import utils
+import pypdf
 from pdf_tool.pdf import Pdf
 
 class Data:
@@ -30,31 +30,43 @@ class Data:
         else:
             for pdf in self.pdfs:
                 if pdf.filename in filenames:
-                    pdf.writer = utils.generate_bookmarks(pdf.reader)
+                    pdf.generate_bookmarks()
             return True
 
     def combine_pdfs(self, filenames):
         readers = [pdf.reader for pdf in self.pdfs if pdf.filename in filenames]
         if readers:
-            writer = utils.combine_pdfs(readers)
+            writer = pypdf.PdfWriter()
+            page_num = 0
+            for reader in readers:
+                first_page = True
+                for page in reader.pages:
+                    writer.add_page(page)
+                    text = page.extract_text()
+                    # If there is no text on a page, we will just skip it
+                    try:
+                        heading = text[:text.index("\n")]
+                    except:
+                        continue
+                    if first_page:
+                        parent_bookmark = writer.add_outline_item(heading, page_num)
+                        first_page = False
+                    else:
+                        writer.add_outline_item(heading, page_num, parent_bookmark)
+                    page_num += 1
             if writer:
-                utils.save_new_pdf(writer, 'Combined.pdf')
-                return True
+                try:
+                    writer.page_mode = '/UseOutlines'
+                    with open('Combined.pdf', "wb") as file:
+                        writer.write(file)
+                    return True
+                except:
+                    return False
         return False
     
     def get_bookmarks(self, filename: str) -> list:
         bookmarks = [pdf.reader.outline for pdf in self.pdfs if pdf.filename == filename]
         return bookmarks
-
-    def save_files(self, filenames):
-        if not self.pdfs:
-            return False
-        else:
-            for pdf in self.pdfs:
-                if pdf.filename in filenames:
-                    # utils.save_new_pdf(pdf.writer, pdf.filename)
-                    utils.save_new_pdf(pdf.writer, utils.name_new_pdf(pdf.filename)) # TODO: In the final version, we will not be generating the new filename, at least not like this
-            return True
 
     def reset(self):
         self.__init__()

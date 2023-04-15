@@ -128,11 +128,6 @@ class App(ctk.CTk):
                                            width=20,
                                            command=self.combine_pdfs)
         self.btn_combine_pdfs.pack(pady=(PADDING, 0))
-        self.btn_save_changes = ctk.CTkButton(self.frm_buttons,
-                                           text='Save changes',
-                                           width=20,
-                                           command=self.save_changes)
-        self.btn_save_changes.pack(pady=(PADDING, 0))
         self.btn_quit = ctk.CTkButton(self.frm_buttons,
                                    text='Quit',
                                    width=20,
@@ -188,12 +183,6 @@ class App(ctk.CTk):
             self.update_status('Combined PDF files into Combined.pdf')
         else:
             self.update_status('Failed to combine PDF files, make sure your files are not corrupted')
-
-    def save_changes(self):
-        if self.data.save_files(self.pdf_list.get_selected()):
-            self.update_status("Changes saved succefully")
-        else:
-            self.update_status("Choose PDF files first")
 
     def update_status(self, message: str):
         self.lbl_status.configure(text=message)

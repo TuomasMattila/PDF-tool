@@ -11,6 +11,7 @@ class Pdf:
     Reader is generated using the `filename` given as an argument,
     and all pages and metadata from reader are added to the writer.
     """
+    BM_MAX_LENGTH = 85
     def __init__(self, filename: str):
         self.filename = filename
         try:
@@ -40,6 +41,8 @@ class Pdf:
             # If there is no text on a page, we will just skip it
             try:
                 heading = text[:text.index("\n")].strip() # TODO: Have to make sure the bookmark text is not too short or long, cutting to '\n' might not be sufficient at all times
+                if len(heading) > self.BM_MAX_LENGTH:
+                    heading = heading[:self.BM_MAX_LENGTH]
             except:
                 continue
             self.writer.add_outline_item(heading, page_num) # TODO: How to adjust the zoom of the bookmark? ('fit' parameter? How to use?)

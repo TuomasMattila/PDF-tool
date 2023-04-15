@@ -43,7 +43,7 @@ class Data:
         return False
     
     def get_bookmarks(self, filename: str) -> list:
-        bookmarks = [pdf.get_bookmarks() for pdf in self.pdfs if pdf.filename == filename]
+        bookmarks = [pdf.reader.outline for pdf in self.pdfs if pdf.filename == filename]
         return bookmarks
 
     def save_files(self, filenames):

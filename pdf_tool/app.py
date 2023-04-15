@@ -51,16 +51,24 @@ class BookmarkList(ctk.CTkScrollableFrame):
         ctk.CTkScrollableFrame.__init__(self, master, **kwargs)
         self.controller = controller
         self.columnconfigure(0, weight=1)
-        self.bookmarks_list = []
+        self.bookmark_labels = []
+        self.current_outline = []
 
     def update_list(self, bookmarks: list):
-        for bookmark in self.bookmarks_list:
+        for bookmark in self.bookmark_labels:
             bookmark.destroy()
-        self.bookmarks_list = []
-        for bookmark in bookmarks:
-            lbl_bookmark = ctk.CTkLabel(self, text=bookmark)
-            lbl_bookmark.grid(row=len(self.bookmarks_list), column=0, sticky='nw')
-            self.bookmarks_list.append(lbl_bookmark)
+        self.bookmark_labels = []
+        self.current_outline = bookmarks
+        self.create_labels(self.current_outline)
+
+    def create_labels(self, outline, level=0):
+        for item in outline:
+            if isinstance(item, list):
+                self.create_labels(item, level=level+1)
+            else:
+                lbl_bookmark = ctk.CTkLabel(self, text=item['/Title'])
+                lbl_bookmark.grid(row=len(self.bookmark_labels), column=0, sticky='nw', padx=(level*PADDING, 0))
+                self.bookmark_labels.append(lbl_bookmark)
 
 
 class App(ctk.CTk):

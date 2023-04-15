@@ -31,20 +31,24 @@ class Pdf:
         # print(final_str)
         self.writer = pypdf.PdfWriter()
 
-    def get_bookmarks(self):
-        if not self.reader:
-            return False
-        bookmarks = []
-        self.get_bookmark_names(self.reader.outline, bookmarks)
-        return bookmarks
-    
-    def get_bookmark_names(self, outline, bm_list):
-        """
-        Recursive function for getting all bookmarks in
-        a hierarchical bookmarks structure.
-        """
-        for item in outline:
-            if isinstance(item, list):
-                self.get_bookmark_names(item, bm_list)
+    def edit_bookmark(self, old_bookmark, new_bookmark):
+        pass
+
+    def find_bookmark(self, bookmark, search_from=None):
+        if search_from == None:
+            search_from = self.reader.outline
+        for item in search_from:
+            if item == bookmark:
+                return item
             else:
-                bm_list.append(item['/Title'])
+                if isinstance(item, list):
+                    value = self.find_bookmark(bookmark, item)
+                    if value:
+                        return value
+        return False
+        
+
+
+
+
+    

@@ -1,6 +1,8 @@
 # PDF-tool
 Tool for modifying PDFs in different ways.
 
+![Screenshot of the application](images/app.png)
+
 ## Features
 - Automatically create bookmarks for a PDF
 - Create bookmarks for multiple PDF files at a time

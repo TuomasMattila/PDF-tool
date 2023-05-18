@@ -25,7 +25,7 @@ class Data:
         return [pdf_file.filename for pdf_file in self.pdfs]
     
     def generate_bookmarks(self, filenames):
-        if not self.pdfs:
+        if not self.pdfs or filenames == []:
             return False
         else:
             for pdf in self.pdfs:
